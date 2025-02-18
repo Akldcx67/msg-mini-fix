@@ -16,6 +16,19 @@
             max-width: 300px;
             margin-top: 5px;
         }
+        #emoji-list {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            position: absolute;
+            z-index: 1000;
+        }
+        .emoji {
+            cursor: pointer;
+            font-size: 20px;
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
@@ -25,11 +38,15 @@
     </div>
 
     <form id="message-form" action="{{ url_for('send_message', chat_id=chat.chat_id) }}" method="POST" enctype="multipart/form-data">
-        <textarea name="text" required placeholder="Ваше сообщение..." style="width: 100%; height: 60px;"></textarea>
+        <textarea name="text" id="message-input" required placeholder="Ваше сообщение..." style="width: 100%; height: 60px;"></textarea>
         <br>
         <input type="file" name="media" accept="image/*,video/*">
         <br>
         <button type="submit">Отправить</button>
+        <button type="button" id="emoji-button">😊</button>
+        <div id="emoji-list">
+            <!-- Эмодзи будут добавлены здесь -->
+        </div>
     </form>
 
     <a href="{{ url_for('chat_page') }}">Назад к чатам</a>
@@ -39,6 +56,23 @@
     <script>
         $(document).ready(function() {
             let lastMessageTime = null;
+
+            const emojis = [
+                    "😀", "😂", "😍", "😢", "😎", "👍", "👎", "🎉", "🔥", "✨",
+                    "💔", "🙏", "😱", "😇", "🤔", "😴", "😁", "🤗", "😜", "😋",
+                    "😬", "😳", "😏", "😒", "😅", "😓", "🤩", "😈", "👻", "💀",
+                    "🤖", "🎃", "🐶", "🐱", "🐭", "🐰", "🦊", "🦁", "🐮", "🐷",
+                    "🐸", "🦄", "🐢", "🐬", "🐳", "🌼", "🌻", "🌸", "🍀", "🍎",
+                    "🍉", "🍌", "🍓", "🍕", "🍔", "🌭", "🍿", "🍩", "🍪", "☕",
+                    "🍷", "🍺", "🍸", "🌍", "🌎", "🌏", "🌈", "☀️", "🌧️", "⛄",
+                    "🌪️", "🌊", "🔔", "🎵", "🎶", "🎤", "🎧", "🎸", "🎹", "🎷",
+                    "📚", "📖", "🖼️", "🎨", "🎬", "🎮", "🧩", "🎲", "🧸", "🎁",
+                    "🎈", "💌", "💖", "💞", "💫", "🌟", "🏆", "🎖️", "🎗️", "🕺",
+                    "💃", "👑", "🎩", "🕶️", "👓", "👔", "👕", "👖", "👗", "👘",
+                    "👙", "👚", "👛", "👜", "👝", "👞", "👟", "👠", "👡", "🩴",
+                    "🧢", "🎒", "👣", "🧦", "🧤", "🧥", "🧥", "🧳", "🌍", "💼",
+                    "🤡"
+                ];
 
             function loadMessages() {
                 $.ajax({
@@ -101,6 +135,24 @@
                         alert("Ошибка при отправке сообщения");
                     }
                 });
+            });
+
+            // Отображение эмодзи
+            emojis.forEach(function(emoji) {
+                $("#emoji-list").append(`<span class="emoji">${emoji}</span>`);
+            });
+
+            // Показать/скрыть список эмодзи
+            $("#emoji-button").click(function() {
+                $("#emoji-list").toggle();
+            });
+
+            // Добавление эмодзи в текстовое поле
+            $(document).on("click", ".emoji", function() {
+                const emoji = $(this).text();
+                const messageInput = $("#message-input");
+                messageInput.val(messageInput.val() + emoji);
+                $("#emoji-list").hide(); // Скрыть список эмодзи после выбора
             });
         });
     </script>
