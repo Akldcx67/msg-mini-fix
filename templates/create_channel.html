@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Создать канал</h1>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <label for="channel_name">Название канала:</label>
         <input type="text" name="channel_name" required><br>
 
@@ -14,6 +14,9 @@
         {% for username in users %}
         <input type="checkbox" name="admins" value="{{ username }}"> {{ username }}<br>
         {% endfor %}
+
+        <label for="channel_image">Изображение канала:</label>
+        <input type="file" name="channel_image" accept="image/*"><br>
 
         <button type="submit">Создать канал</button>
     </form>

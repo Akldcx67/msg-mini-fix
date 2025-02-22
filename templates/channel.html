@@ -3,17 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ channel.name }}</title>
+    <style>
+        .channel-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .channel-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .message {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .user-pfp {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .message-body {
+            margin-left: 40px; /* Adjust based on PFP size */
+        }
+    </style>
 </head>
 <body>
-    <h1>Канал: {{ channel.name }}</h1>
+    <div class="channel-header">
+        {% if channel.channel_image %}
+        <img src="{{ url_for('media', filename=channel.channel_image) }}" alt="Channel Image" class="channel-image">
+        {% else %}
+        <img src="{{ url_for('static', filename='default_channel_image.png') }}" alt="Default Channel Image" class="channel-image">
+        {% endif %}
+        <h1>Канал: {{ channel.name }}</h1>
+        {% if session['username'] in channel.admins %}
+        <a href="{{ url_for('channel_settings', channel_id=channel.channel_id) }}">Настройки канала</a>
+        {% endif %}
+    </div>
     <div id="messages">
         {% for message in channel.messages %}
-            <div>
-                [<b>{{ message.author }}</b>]: {{ message.text }} <i>{{ message.time }}</i>
-                {% if message.media %}
+            <div class="message">
+                {% set user_info = users.get(message.author, {}) %}
+                <div class="message-header">
+                    {% if user_info.profile_picture %}
+                    <img src="{{ url_for('media', filename=user_info.profile_picture) }}" alt="Profile Picture" class="user-pfp">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='default_pfp.png') }}" alt="Default Profile Picture" class="user-pfp">
+                    {% endif %}
+                    <strong>{{ message.author }}</strong>
+                    <em>{{ message.time }}</em>
+                </div>
+                <div class="message-body">
+                    {{ message.text }}
+                    {% if message.media %}
                     <br>
                     <img src="{{ url_for('media', filename=message.media) }}" alt="Media" style="max-width: 200px; max-height: 200px;">
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     </div>

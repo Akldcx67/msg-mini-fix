@@ -106,7 +106,7 @@ def register():
         first_name = request.form["first_name"]
         last_name = request.form["last_name"]
         age = request.form["age"]
-        about_me = request.form.get("about_me", "")  # Новое поле "О себе"
+        about_me = request.form.get("about_me", "")
 
         password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         users = load_users()
@@ -114,12 +114,15 @@ def register():
         if username in users:
             return "Пользователь с этим именем уже существует.", 400
 
+        profile_picture_filename = None
+
         users[username] = {
             "password": password_hash.decode(),
             "first_name": first_name,
             "last_name": last_name,
             "age": age,
-            "about_me": about_me  # Сохраняем информацию "О себе"
+            "about_me": about_me,
+            "profile_picture": profile_picture_filename
         }
         save_users(users)
         return redirect(url_for("login"))
@@ -168,14 +171,24 @@ def create_chat():
 
         chat_name = request.form["chat_name"]
         participants = request.form.getlist("participants")
+        chat_image = request.files.get("chat_image")  # Get the uploaded chat image
 
         chat_id = str(uuid.uuid4())
         chat = {
             "chat_id": chat_id,
             "name": chat_name,
             "participants": participants,
-            "messages": []
+            "messages": [],
+            "chat_image": None,
+            "description": ""  # New field for chat description
         }
+
+        # Save the chat image if uploaded
+        if chat_image:
+            chat_image_filename = secure_filename(chat_image.filename)
+            chat_image_path = os.path.join(MEDIA_FOLDER, chat_image_filename)
+            chat_image.save(chat_image_path)
+            chat["chat_image"] = chat_image_filename  # Save the image filename in the chat data
 
         chats = load_chats()
         chats.append(chat)
@@ -202,7 +215,8 @@ def view_chat(chat_id):
     if username not in chat["participants"]:
         return "У вас нет доступа к этому чату", 403
 
-    return render_template("chat.html", chat=chat)
+    users = load_users()  # Load all users
+    return render_template("chat.html", chat=chat, users=users)
 
 # Отправка сообщения
 @app.route("/send_message/<chat_id>", methods=["POST"])
@@ -252,6 +266,39 @@ def load_messages_route(chat_id):
     messages = load_messages(chat_id, last_time)
     return jsonify(messages)
 
+# Настройки чатов
+@app.route("/chat/<chat_id>/settings", methods=["GET", "POST"])
+def chat_settings(chat_id):
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    chats = load_chats()
+    chat = next((c for c in chats if c["chat_id"] == chat_id), None)
+
+    if not chat:
+        return "Чат не найден", 404
+
+    if session["username"] not in chat["participants"]:
+        return "У вас нет доступа к настройкам этого чата", 403
+
+    if request.method == "POST":
+        chat["name"] = request.form["chat_name"]
+        chat["description"] = request.form.get("chat_description", "")
+        chat["participants"] = request.form.getlist("participants")
+
+        chat_image = request.files.get("chat_image")
+        if chat_image:
+            chat_image_filename = secure_filename(chat_image.filename)
+            chat_image_path = os.path.join(MEDIA_FOLDER, chat_image_filename)
+            chat_image.save(chat_image_path)
+            chat["chat_image"] = chat_image_filename
+
+        save_chats(chats)
+        return redirect(url_for("view_chat", chat_id=chat_id))
+
+    all_users = load_users().keys()
+    return render_template("chat_settings.html", chat=chat, all_users=all_users)
+
 # Страница пользователей
 @app.route("/users", methods=["GET"])
 def users_page():
@@ -282,12 +329,19 @@ def edit_profile():
         first_name = request.form["first_name"]
         last_name = request.form["last_name"]
         age = request.form["age"]
-        about_me = request.form.get("about_me", "")  # Новое поле "О себе"
+        about_me = request.form.get("about_me", "")
+        profile_picture = request.files.get("profile_picture")
 
         users[username]["first_name"] = first_name
         users[username]["last_name"] = last_name
         users[username]["age"] = age
-        users[username]["about_me"] = about_me  # Обновляем информацию "О себе"
+        users[username]["about_me"] = about_me
+
+        if profile_picture:
+            profile_picture_filename = secure_filename(profile_picture.filename)
+            profile_picture_path = os.path.join(MEDIA_FOLDER, profile_picture_filename)
+            profile_picture.save(profile_picture_path)
+            users[username]["profile_picture"] = profile_picture_filename
 
         save_users(users)
         return redirect(url_for("user_profile", username=username))
@@ -337,6 +391,7 @@ def create_channel():
 
         channel_name = request.form["channel_name"]
         admins = request.form.getlist("admins")
+        channel_image = request.files.get("channel_image")  # Get the uploaded channel image
 
         channel_id = str(uuid.uuid4())
         channel = {
@@ -344,8 +399,17 @@ def create_channel():
             "name": channel_name,
             "admins": admins,
             "subscribers": [],
-            "messages": []
+            "messages": [],
+            "channel_image": None,
+            "description": ""  # New field for channel description
         }
+
+        # Save the channel image if uploaded
+        if channel_image:
+            channel_image_filename = secure_filename(channel_image.filename)
+            channel_image_path = os.path.join(MEDIA_FOLDER, channel_image_filename)
+            channel_image.save(channel_image_path)
+            channel["channel_image"] = channel_image_filename  # Save the image filename in the channel data
 
         channels = load_channels()
         channels["channels"].append(channel)
@@ -368,7 +432,8 @@ def view_channel(channel_id):
     if not channel:
         return "Канал не найден", 404
 
-    return render_template("channel.html", channel=channel)
+    users = load_users()  # Load all users
+    return render_template("channel.html", channel=channel, users=users)
 
 # Отправка сообщения в канал
 @app.route("/send_message_channel/<channel_id>", methods=["POST"])
@@ -407,6 +472,40 @@ def send_message_channel(channel_id):
     save_channels(channels)
 
     return redirect(url_for("view_channel", channel_id=channel_id))
+
+# Настройки каналов
+@app.route("/channel/<channel_id>/settings", methods=["GET", "POST"])
+def channel_settings(channel_id):
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    channels = load_channels()
+    channel = next((c for c in channels["channels"] if c["channel_id"] == channel_id), None)
+
+    if not channel:
+        return "Канал не найден", 404
+
+    if session["username"] not in channel["admins"]:
+        return "У вас нет прав для изменения настроек этого канала", 403
+
+    if request.method == "POST":
+        channel["name"] = request.form["channel_name"]
+        channel["description"] = request.form.get("channel_description", "")
+        channel["admins"] = request.form.getlist("admins")
+        channel["subscribers"] = request.form.getlist("subscribers")
+
+        channel_image = request.files.get("channel_image")
+        if channel_image:
+            channel_image_filename = secure_filename(channel_image.filename)
+            channel_image_path = os.path.join(MEDIA_FOLDER, channel_image_filename)
+            channel_image.save(channel_image_path)
+            channel["channel_image"] = channel_image_filename
+
+        save_channels(channels)
+        return redirect(url_for("view_channel", channel_id=channel_id))
+
+    all_users = load_users().keys()
+    return render_template("channel_settings.html", channel=channel, all_users=all_users)
 
 # Страница со списком каналов
 @app.route("/channels")

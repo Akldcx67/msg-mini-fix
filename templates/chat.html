@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -5,12 +6,26 @@
     <title>{{ chat.name }}</title>
     <script src="http://code.jquery.com/jquery-3.1.1.js"></script>
     <style>
-        .user-message {
-            border: 1px solid #007bff;
+        .message {
+            border: 1px solid #ccc;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
-            background-color: #e7f3ff;
+            background-color: #f9f9f9;
+        }
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .user-pfp {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .message-body {
+            margin-left: 40px; /* Adjust based on PFP size */
         }
         video {
             max-width: 300px;
@@ -34,7 +49,27 @@
 <body>
     <h1>Чат: {{ chat.name }}</h1>
     <div id="messages">
-        <!-- Messages will be loaded here -->
+        {% for message in chat.messages %}
+            <div class="message">
+                {% set user_info = users.get(message.author, {}) %}
+                <div class="message-header">
+                    {% if user_info.profile_picture %}
+                    <img src="{{ url_for('media', filename=user_info.profile_picture) }}" alt="Profile Picture" class="user-pfp">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='default_pfp.png') }}" alt="Default Profile Picture" class="user-pfp">
+                    {% endif %}
+                    <strong>{{ message.author }}</strong>
+                    <em>{{ message.time }}</em>
+                </div>
+                <div class="message-body">
+                    {{ message.text }}
+                    {% if message.media %}
+                    <br>
+                    <img src="{{ url_for('media', filename=message.media) }}" alt="Media" style="max-width: 200px; max-height: 200px;">
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
     <form id="message-form" action="{{ url_for('send_message', chat_id=chat.chat_id) }}" method="POST" enctype="multipart/form-data">
@@ -51,29 +86,29 @@
 
     <a href="{{ url_for('chat_page') }}">Назад к чатам</a>
 
-    <!-- MAGIC CODE!!! DONT TOUCH! -->
-
+    <!-- JavaScript for real-time messaging and emojis -->
     <script>
         $(document).ready(function() {
             let lastMessageTime = null;
 
             const emojis = [
-                    "😀", "😂", "😍", "😢", "😎", "👍", "👎", "🎉", "🔥", "✨",
-                    "💔", "🙏", "😱", "😇", "🤔", "😴", "😁", "🤗", "😜", "😋",
-                    "😬", "😳", "😏", "😒", "😅", "😓", "🤩", "😈", "👻", "💀",
-                    "🤖", "🎃", "🐶", "🐱", "🐭", "🐰", "🦊", "🦁", "🐮", "🐷",
-                    "🐸", "🦄", "🐢", "🐬", "🐳", "🌼", "🌻", "🌸", "🍀", "🍎",
-                    "🍉", "🍌", "🍓", "🍕", "🍔", "🌭", "🍿", "🍩", "🍪", "☕",
-                    "🍷", "🍺", "🍸", "🌍", "🌎", "🌏", "🌈", "☀️", "🌧️", "⛄",
-                    "🌪️", "🌊", "🔔", "🎵", "🎶", "🎤", "🎧", "🎸", "🎹", "🎷",
-                    "📚", "📖", "🖼️", "🎨", "🎬", "🎮", "🧩", "🎲", "🧸", "🎁",
-                    "🎈", "💌", "💖", "💞", "💫", "🌟", "🏆", "🎖️", "🎗️", "🕺",
-                    "💃", "👑", "🎩", "🕶️", "👓", "👔", "👕", "👖", "👗", "👘",
-                    "👙", "👚", "👛", "👜", "👝", "👞", "👟", "👠", "👡", "🩴",
-                    "🧢", "🎒", "👣", "🧦", "🧤", "🧥", "🧥", "🧳", "🌍", "💼",
-                    "🤡"
-                ];
+                "😀", "😂", "😍", "😢", "😎", "👍", "👎", "🎉", "🔥", "✨",
+                "💔", "🙏", "😱", "😇", "🤔", "😴", "😁", "🤗", "😜", "😋",
+                "😬", "😳", "😏", "😒", "😅", "😓", "🤩", "😈", "👻", "💀",
+                "🤖", "🎃", "🐶", "🐱", "🐭", "🐰", "🦊", "🦁", "🐮", "🐷",
+                "🐸", "🦄", "🐢", "🐬", "🐳", "🌼", "🌻", "🌸", "🍀", "🍎",
+                "🍉", "🍌", "🍓", "🍕", "🍔", "🌭", "🍿", "🍩", "🍪", "☕",
+                "🍷", "🍺", "🍸", "🌍", "🌎", "🌏", "🌈", "☀️", "🌧️", "⛄",
+                "🌪️", "🌊", "🔔", "🎵", "🎶", "🎤", "🎧", "🎸", "🎹", "🎷",
+                "📚", "📖", "🖼️", "🎨", "🎬", "🎮", "🧩", "🎲", "🧸", "🎁",
+                "🎈", "💌", "💖", "💞", "💫", "🌟", "🏆", "🎖️", "🎗️", "🕺",
+                "💃", "👑", "🎩", "🕶️", "👓", "👔", "👕", "👖", "👗", "👘",
+                "👙", "👚", "👛", "👜", "👝", "👞", "👟", "👠", "👡", "🩴",
+                "🧢", "🎒", "👣", "🧦", "🧤", "🧥", "🧥", "🧳", "🌍", "💼",
+                "🤡"
+            ];
 
+            // Load messages dynamically
             function loadMessages() {
                 $.ajax({
                     url: "{{ url_for('load_messages_route', chat_id=chat.chat_id) }}",
@@ -82,11 +117,13 @@
                     success: function(data) {
                         var messagesDiv = $("#messages");
                         data.forEach(function(message) {
+                            var user_info = {{ users | tojson }}[message.author] || {};
+                            var pfpUrl = user_info.profile_picture ? "{{ url_for('media', filename='') }}" + user_info.profile_picture : "{{ url_for('static', filename='default_pfp.png') }}";
                             var mediaHtml = '';
                             if (message.media) {
                                 var mediaUrl = "{{ url_for('media', filename='') }}" + message.media;
-                                var mediaId = "media-" + message.media; // Unique identifier for each media file
-                                if (!$(`#${mediaId}`).length) { // Check if the media element already exists
+                                var mediaId = "media-" + message.media;
+                                if (!$(`#${mediaId}`).length) {
                                     if (message.media.match(/\.(jpg|jpeg|png|gif)$/i)) {
                                         mediaHtml = `<br><img id="${mediaId}" src="${mediaUrl}" alt="Media" style="max-width: 300px;">`;
                                     } else if (message.media.match(/\.(mp4|webm|ogg)$/i)) {
@@ -95,9 +132,16 @@
                                 }
                             }
                             var messageHtml = `
-                                <div class="user-message">
-                                    <strong>${message.author}:</strong> ${message.text} <em>${message.time}</em>
-                                    ${mediaHtml}
+                                <div class="message">
+                                    <div class="message-header">
+                                        <img src="${pfpUrl}" alt="Profile Picture" class="user-pfp">
+                                        <strong>${message.author}</strong>
+                                        <em>${message.time}</em>
+                                    </div>
+                                    <div class="message-body">
+                                        ${message.text}
+                                        ${mediaHtml}
+                                    </div>
                                 </div>
                             `;
                             messagesDiv.append(messageHtml);
@@ -113,9 +157,9 @@
             }
 
             loadMessages();
-
             setInterval(loadMessages, 1000);
 
+            // Handle message submission
             $("#message-form").submit(function(event) {
                 event.preventDefault();
 
@@ -137,22 +181,20 @@
                 });
             });
 
-            // Отображение эмодзи
+            // Emoji functionality
             emojis.forEach(function(emoji) {
                 $("#emoji-list").append(`<span class="emoji">${emoji}</span>`);
             });
 
-            // Показать/скрыть список эмодзи
             $("#emoji-button").click(function() {
                 $("#emoji-list").toggle();
             });
 
-            // Добавление эмодзи в текстовое поле
             $(document).on("click", ".emoji", function() {
                 const emoji = $(this).text();
                 const messageInput = $("#message-input");
                 messageInput.val(messageInput.val() + emoji);
-                $("#emoji-list").hide(); // Скрыть список эмодзи после выбора
+                $("#emoji-list").hide();
             });
         });
     </script>

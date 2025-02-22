@@ -6,11 +6,20 @@
 </head>
 <body>
     <h1>Редактировать профиль</h1>
-    <form method="POST" action="/edit_profile">
+    <form method="POST" action="/edit_profile" enctype="multipart/form-data">
         <input type="text" name="first_name" placeholder="Имя" value="{{ user_info.first_name }}" required>
         <input type="text" name="last_name" placeholder="Фамилия" value="{{ user_info.last_name }}" required>
         <input type="number" name="age" placeholder="Возраст" value="{{ user_info.age }}" required>
         <textarea name="about_me" placeholder="О себе">{{ user_info.about_me }}</textarea>
+
+        <!-- Profile Picture Upload -->
+        <label for="profile_picture">Профильное фото:</label>
+        {% if user_info.profile_picture %}
+        <p>Текущее фото профиля:</p>
+        <img src="{{ url_for('media', filename=user_info.profile_picture) }}" alt="Current Profile Picture" width="100">
+        {% endif %}
+        <input type="file" name="profile_picture" accept="image/*">
+
         <button type="submit">Сохранить изменения</button>
     </form>
     <a href="{{ url_for('user_profile', username=session['username']) }}">Отмена</a>
