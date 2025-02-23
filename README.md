@@ -1,7 +1,7 @@
 
 
 <div align="center">
-  <img alt="Логотип" src="img.png" width="200"/>
+  <img alt="Логотип" src="img.png"/>
 </div>
 
 ---
