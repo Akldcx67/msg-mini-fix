@@ -12,7 +12,7 @@ from modules.loc_io import load_chats, load_users, save_users, save_chats, load_
 
 
 app = Flask(__name__)
-app.secret_key = 'NKYC!9t3t11Yz0@m*h2zIW_nhIN_CnQQ^'v
+app.secret_key = 'NKYC!9t3t11Yz0@m*h2zIW_nhIN_CnQQ^'
 
 
 # Главная страница
