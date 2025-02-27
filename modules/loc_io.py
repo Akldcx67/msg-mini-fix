@@ -1,7 +1,7 @@
 import json
 
 
-from modules.constants import USERS_FILE, CHATS_FILE, CHANNELS_FILE, MESSAGES_FILE
+from modules.constants import USERS_FILE, CHATS_FILE, CHANNELS_FILE, MESSAGES_FILE, KEYS_FILE
 
 
 def load_data(filename, default=None):
@@ -56,3 +56,11 @@ def save_message(chat_id, message):
         data[chat_id_str] = []
     data[chat_id_str].append(message)
     save_data(MESSAGES_FILE, data)
+
+
+def load_keys():
+    return load_data(KEYS_FILE)
+
+
+def save_keys(keys):
+    save_data(KEYS_FILE, keys)
