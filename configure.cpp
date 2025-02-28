@@ -149,7 +149,9 @@ int installLinux() {
                 cout << "Run configure as root!" << endl;
                 return 1;
             }
-            system("find /usr/bin/cosmicm -not -name '*.json' -not -path '.' -delete");
+            system("find /usr/bin/cosmicm -not -name '*.json' -not -path '.' -delete > /dev/null 2>&1");
+            system("mkdir /usr/bin/cosmicm/templates");
+            system("mkdir /usr/bin/cosmicm/modules");
             for (string filename : back_files) {
                 string command = "cp " + filename + " /usr/bin/cosmicm/" + filename + " > /dev/null 2>&1";
                 system(command.c_str());
