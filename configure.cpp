@@ -150,10 +150,6 @@ int installLinux() {
                 return 1;
             }
             system("find /usr/bin/cosmicm -not -name '*.json' -not -path '.' -delete");
-            for (string filename : data_files) {
-                string command = "cp " + filename + " /usr/bin/cosmicm/ > /dev/null 2>&1";
-                system(command.c_str());
-            }
             for (string filename : back_files) {
                 string command = "cp " + filename + " /usr/bin/cosmicm/" + filename + " > /dev/null 2>&1";
                 system(command.c_str());
