@@ -18,7 +18,7 @@ const string python_libraries[] = {"flask", "bcrypt", "uuid"};
 const string data_files[] = {"channels.json", "chats.json",
     "db.json", "keys.json",
     "users.json"};
-const string back_files[] = {"main.py", "./modules/constants.py", "./modules/encryption.py", 
+const string back_files[] = {"main.py", "./modules/constants.py", 
     "./modules/gambling.py", "./modules/keygen.py", 
     "./modules/loc_io.py"};
 const string front_files[] = {"./templates/channel_list.html", "./templates/channel_settings.html", 
