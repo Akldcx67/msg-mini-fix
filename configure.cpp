@@ -164,7 +164,7 @@ int installLinux() {
         }
         return 0;
     }
-    cout << "Do you want to install cosmicm to /usr/bin ?[Y/N]";
+    cout << "Do you want to install cosmic to /usr/bin ?[Y/N]";
     char ans;
     cin >> ans;
     if (ans == 'Y' || ans == 'y') {
