@@ -62,5 +62,7 @@ def load_keys():
     return load_data(KEYS_FILE)
 
 
-def save_keys(keys):
-    save_data(KEYS_FILE, keys)
+def save_key(username, key):
+    data = load_data(KEYS_FILE, {})
+    data[username] = key
+    save_data(KEYS_FILE, data)
