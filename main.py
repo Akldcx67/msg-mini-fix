@@ -3,12 +3,13 @@ from datetime import datetime
 import os
 import bcrypt
 import uuid
+import threading
 from werkzeug.utils import secure_filename
 
 
-from modules.keygen import load_keys
+from modules.keygen import generate_key
 from modules.constants import MEDIA_FOLDER, MESSAGE_LIMIT
-from modules.loc_io import load_chats, load_users, save_users, save_chats, load_messages, save_message, save_channels, load_channels
+from modules.loc_io import load_chats, load_users, save_users, save_chats, load_messages, save_message, save_channels, load_channels, save_key, load_keys
 
 
 app = Flask(__name__)
@@ -82,7 +83,7 @@ def chat_page():
     if "username" not in session:
         return redirect(url_for("login"))
     chats = load_chats()
-    return render_template("chat_list.html", chats=chats, user=session["username"])
+    return render_template("chat_list.html", chats=chats)
 
 
 # Создание чата
@@ -394,4 +395,30 @@ def media(filename):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    threading.Thread(target=app.run, args=['0.0.0.0', 8080]).start()
+    command = input(">>>").split()
+    while command[0] != "exit":
+        if command[0] == "add_key":
+            if len(command) < 2:
+                print("add_key username")
+            else:
+                key = generate_key()
+                print("Generated key: " + key)
+                save_key(command[1], key)
+        elif command[0] == "get_key":
+            if len(command) < 2:
+                print("get_key username")
+            else:
+                keys = load_keys()
+                try:
+                    key = keys[command[1]]
+                    print(key)
+                except:
+                    print("No user with name " + command[1] + " in users.json")
+        else:
+            print("Unknown command, try again")
+            print("add_key username")
+            print("get_key username")
+            print("exit")
+        command = input(">>>").split()
+    os._exit(0)
