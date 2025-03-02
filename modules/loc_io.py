@@ -66,3 +66,10 @@ def save_key(username, key):
     data = load_data(KEYS_FILE, {})
     data[username] = key
     save_data(KEYS_FILE, data)
+    
+
+def delete_key(username):
+    data = load_data(KEYS_FILE, {})
+    if username in data:
+        del data[username]
+    save_data(KEYS_FILE, data)
