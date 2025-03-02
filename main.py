@@ -4,18 +4,21 @@ import os
 import bcrypt
 import uuid
 import threading
+import time
 from werkzeug.utils import secure_filename
+import logging
 
 
 from modules.keygen import generate_key
 from modules.constants import MEDIA_FOLDER, MESSAGE_LIMIT
-from modules.loc_io import load_chats, load_users, save_users, save_chats, load_messages, save_message, save_channels, load_channels, save_key, load_keys
+from modules.loc_io import load_chats, save_chats, load_users, save_users, load_messages, save_message, save_channels, load_channels, save_key, load_keys, delete_key
 
 
 app = Flask(__name__)
 app.secret_key = 'NKYC!9t3t11Yz0@m*h2zIW_nhIN_CnQQ^'
-
-
+# Отключение логов
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 # Главная страница
 @app.route("/")
 def main_page():
@@ -83,7 +86,7 @@ def chat_page():
     if "username" not in session:
         return redirect(url_for("login"))
     chats = load_chats()
-    return render_template("chat_list.html", chats=chats)
+    return render_template("chat_list.html", chats=chats, user=session["username"])
 
 
 # Создание чата
@@ -396,6 +399,7 @@ def media(filename):
 
 if __name__ == "__main__":
     threading.Thread(target=app.run, args=['0.0.0.0', 8080]).start()
+    time.sleep(3)
     command = input(">>>").split()
     while command[0] != "exit":
         if command[0] == "add_key":
@@ -412,13 +416,24 @@ if __name__ == "__main__":
                 keys = load_keys()
                 try:
                     key = keys[command[1]]
-                    print(key)
+                    print(command[1] + ": " + key)
                 except:
                     print("No user with name " + command[1] + " in users.json")
+        elif command[0] == "key_list":
+            keys = load_keys()
+            for key in keys.keys():
+                print(key + ": " + keys[key])
+        elif command[0] == "delete_key":
+            if len(command) < 2:
+                print("delete_key username")
+            else:
+                delete_key(command[1])
         else:
             print("Unknown command, try again")
             print("add_key username")
+            print("delete_key username")
             print("get_key username")
+            print("key_list")
             print("exit")
         command = input(">>>").split()
     os._exit(0)
