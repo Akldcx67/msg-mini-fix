@@ -82,7 +82,7 @@ def chat_page():
     if "username" not in session:
         return redirect(url_for("login"))
     chats = load_chats()
-    return render_template("chat_list.html", chats=chats)
+    return render_template("chat_list.html", chats=chats, user=session["username"])
 
 
 # Создание чата

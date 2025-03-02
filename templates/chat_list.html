@@ -21,14 +21,16 @@
     <h1>Ваши чаты</h1>
     <ul>
         {% for chat in chats %}
-        <li class="chat-item">
-            {% if chat.chat_image %}
-            <img src="{{ url_for('media', filename=chat.chat_image) }}" alt="Chat Image" class="chat-image">
-            {% else %}
-            <img src="{{ url_for('static', filename='default_chat_image.png') }}" alt="Default Chat Image" class="chat-image">
+            {% if user in chat.participants %}
+            <li class="chat-item">
+                {% if chat.chat_image %}
+                <img src="{{ url_for('media', filename=chat.chat_image) }}" alt="Chat Image" class="chat-image">
+                {% else %}
+                <img src="{{ url_for('static', filename='default_chat_image.png') }}" alt="Default Chat Image" class="chat-image">
+                {% endif %}
+                <a href="{{ url_for('view_chat', chat_id=chat['chat_id']) }}">{{ chat['name'] }}</a>
+            </li>
             {% endif %}
-            <a href="{{ url_for('view_chat', chat_id=chat['chat_id']) }}">{{ chat['name'] }}</a>
-        </li>
         {% endfor %}
     </ul>
 </body>
