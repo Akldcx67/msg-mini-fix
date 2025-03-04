@@ -16,7 +16,7 @@ from modules.loc_io import load_chats, save_chats, load_users, save_users, load_
 
 app = Flask(__name__)
 app.secret_key = 'NKYC!9t3t11Yz0@m*h2zIW_nhIN_CnQQ^'
-# Отключение логов
+# Отключение логов сервера
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 # Главная страница
@@ -95,6 +95,7 @@ def create_chat():
     if request.method == "POST":
         if "username" not in session:
             return redirect(url_for("login"))
+        # Получение заполненных данных
         chat_name = request.form["chat_name"]
         participants = request.form.getlist("participants")
         chat_image = request.files.get("chat_image")  # Get the uploaded chat image
@@ -142,6 +143,7 @@ def view_chat(chat_id):
 def send_message(chat_id):
     if "username" not in session:
         return redirect(url_for("login"))
+    # Получение данных
     username = session["username"]
     text = request.form.get("text")
     media = request.files.get("media")
@@ -159,14 +161,14 @@ def send_message(chat_id):
         "author": username,
         "text": text,
         "time": datetime.now().strftime("%H:%M:%S"),
-        "media": None,  # Поле для медиафайла
+        "media": None,
     }
     # Обработка медиафайла
     if media:
         filename = secure_filename(media.filename)
         media_path = os.path.join(MEDIA_FOLDER, filename)
-        media.save(media_path)  # Сохранение файла
-        message["media"] = filename  # Сохраняем имя файла в сообщении
+        media.save(media_path)
+        message["media"] = filename
     save_message(chat_id, message)
     return redirect(url_for("view_chat", chat_id=chat_id))
 
@@ -283,9 +285,10 @@ def create_channel():
     if request.method == "POST":
         if "username" not in session:
             return redirect(url_for("login"))
+        # Получение заполненных данных
         channel_name = request.form["channel_name"]
         admins = request.form.getlist("admins")
-        channel_image = request.files.get("channel_image")  # Get the uploaded channel image
+        channel_image = request.files.get("channel_image")
         channel_id = str(uuid.uuid4())
         channel = {
             "channel_id": channel_id,
@@ -294,9 +297,9 @@ def create_channel():
             "subscribers": [],
             "messages": [],
             "channel_image": None,
-            "description": ""  # New field for channel description
+            "description": ""
         }
-        # Save the channel image if uploaded
+        # Сохраняем изображение канала, если оно емть
         if channel_image:
             channel_image_filename = secure_filename(channel_image.filename)
             channel_image_path = os.path.join(MEDIA_FOLDER, channel_image_filename)
@@ -398,10 +401,13 @@ def media(filename):
 
 
 if __name__ == "__main__":
+    # Запуск сервера
     threading.Thread(target=app.run, args=['0.0.0.0', 8080]).start()
     time.sleep(3)
+    # Запуск консоли
     command = input(">>>").split()
     while command[0] != "exit":
+        # Добавить ключ для пользователя
         if command[0] == "add_key":
             if len(command) < 2:
                 print("add_key username")
@@ -409,6 +415,7 @@ if __name__ == "__main__":
                 key = generate_key()
                 print("Generated key: " + key)
                 save_key(command[1], key)
+        # Получить сгенерированный ключ пользователя
         elif command[0] == "get_key":
             if len(command) < 2:
                 print("get_key username")
@@ -419,21 +426,25 @@ if __name__ == "__main__":
                     print(command[1] + ": " + key)
                 except:
                     print("No user with name " + command[1] + " in users.json")
+        # Список всех ключей и пользователей
         elif command[0] == "key_list":
             keys = load_keys()
             for key in keys.keys():
                 print(key + ": " + keys[key])
+        # Удалить ключ для пользователя
         elif command[0] == "delete_key":
             if len(command) < 2:
                 print("delete_key username")
             else:
                 delete_key(command[1])
         else:
-            print("Unknown command, try again")
+            print("Неизвестная комманда, попробуй снова")
+            print("Список комманд:")
             print("add_key username")
             print("delete_key username")
             print("get_key username")
             print("key_list")
             print("exit")
         command = input(">>>").split()
+    # Полное завершение программы
     os._exit(0)
