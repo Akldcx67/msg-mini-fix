@@ -11,6 +11,7 @@ using namespace std;
     #include <windows.h>
 #else
     #include <cstdlib>
+    #include <unistd.h>
 #endif
 
 
@@ -144,8 +145,7 @@ int installLinux() {
         char ans;
         cin >> ans;
         if (ans == 'Y' || ans == 'y') {
-            int check = system("rm /usr/bin/cosmicm/main.py > /dev/null 2>&1");
-            if (check != 0) {
+            if (getuid() != 0 || geteuid() != 0) {
                 cout << "Run configure as root!" << endl;
                 return 1;
             }
@@ -168,11 +168,11 @@ int installLinux() {
     char ans;
     cin >> ans;
     if (ans == 'Y' || ans == 'y') {
-        int check = system("mkdir /usr/bin/cosmicm > /dev/null 2>&1");
-        if (check != 0) {
+        if (getuid() != 0 || geteuid() != 0) {
             cout << "Run configure as root!" << endl;
             return 1;
         }
+        system("mkdir /usr/bin/cosmicm > /dev/null 2>&1");
         system("mkdir /usr/bin/cosmicm/modules > /dev/null 2>&1");
         system("mkdir /usr/bin/cosmicm/templates > /dev/null 2>&1");
         cout << "Copying data files..." << endl;
