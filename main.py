@@ -3,7 +3,6 @@ from datetime import datetime
 import os
 import bcrypt
 import uuid
-import threading
 import time
 from werkzeug.utils import secure_filename
 import logging
@@ -16,9 +15,8 @@ from modules.loc_io import load_chats, save_chats, load_users, save_users, load_
 
 app = Flask(__name__)
 app.secret_key = 'NKYC!9t3t11Yz0@m*h2zIW_nhIN_CnQQ^'
-# Отключение логов сервера
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+
+
 # Главная страница
 @app.route("/")
 def main_page():
@@ -402,58 +400,4 @@ def media(filename):
 
 if __name__ == "__main__":
     # Запуск сервера
-    threading.Thread(target=app.run, args=['0.0.0.0', 8080]).start()
-    time.sleep(1)
-    # Запуск консоли
-    flag_console = 0
-    command = input(">>>").split()
-    while True:
-        if command:
-            flag_console = 0
-            break
-        else:
-            flag_console = 1
-            command = input(">>>").split()
-    if flag_console == 0:
-        while command[0] != "exit":
-            # Добавить ключ для пользователя
-            if command[0] == "add_key":
-                if len(command) < 2:
-                    print("add_key username")
-                else:
-                    key = generate_key()
-                    print("Generated key: " + key)
-                    save_key(command[1], key)
-            # Получить сгенерированный ключ пользователя
-            elif command[0] == "get_key":
-                if len(command) < 2:
-                    print("get_key username")
-                else:
-                    keys = load_keys()
-                    try:
-                        key = keys[command[1]]
-                        print(command[1] + ": " + key)
-                    except:
-                        print("No user with name " + command[1] + " in users.json")
-            # Список всех ключей и пользователей
-            elif command[0] == "key_list":
-                keys = load_keys()
-                for key in keys.keys():
-                    print(key + ": " + keys[key])
-            # Удалить ключ для пользователя
-            elif command[0] == "delete_key":
-                if len(command) < 2:
-                    print("delete_key username")
-                else:
-                    delete_key(command[1])
-            else:
-                print("Список комманд:")
-                print("help")
-                print("add_key username")
-                print("delete_key username")
-                print("get_key username")
-                print("key_list")
-                print("exit")
-            command = input(">>>").split()
-    # Полное завершение программы
-    os._exit(0)
+    app.run('0.0.0.0', 8080)
