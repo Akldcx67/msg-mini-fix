@@ -91,6 +91,18 @@ int checkPython() {
         command = "python -h > /dev/null 2>&1";
     #endif
     int res = system(command.c_str());
+    switch (res)
+    {
+    case 0:
+        return 0;
+    default:
+        #ifdef _WIN32
+            return 1;
+        #else
+            command = "python3 -h > /dev/null 2>&1";
+        #endif
+    }
+    res = system(command.c_str());
     return res;
 }
 
@@ -140,6 +152,8 @@ int checkFilesystem() {
 
 
 int installLinux() {
+    #ifdef _WIN32
+    #else
     if (checkFileExists("/usr/bin/cosmicm/main.py") || checkFileExists("/usr/bin/cosmicm")) {
         cout << "Programm exist, do you want to update? (database files do not be deleted)[Y/N]";
         char ans;
@@ -197,6 +211,7 @@ int installLinux() {
         system("chmod +x /usr/bin/cosmic");
         cout << "Cosmic installed!" << endl;
     }
+    #endif
     return 0;
 }
 
