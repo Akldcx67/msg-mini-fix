@@ -1,0 +1,61 @@
+@font-face {
+  font-family: 'Hack', sans-serif;
+  src: local('Hack'),
+  url('/css/fonts/HackNerdFont-Bold.ttf') format('truetype')
+}
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none; 
+  font-family: 'Hack', sans-serif;
+}
+/* эт звездочки */
+body {
+  background-image: url('../css/png/1.png');
+  background-repeat: no-repeat;
+  background-size: 100vw 100vh;
+  overflow: hidden;
+}
+.zvezdi {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  z-index: -3;
+  pointer-events: none;
+
+  background-image: url('../css/png/star.png');
+  animation: snow 60s linear infinite;
+}
+@keyframes snow {
+  0%{
+    background-position: 0px 0px, 0px 0px, 0px 0px;
+  }
+  100%{
+    background-position: 800px 0px,600px 1200px, 600px 1800px;
+  }
+}
+.zvezdi1 {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  z-index: -3;
+  pointer-events: none;
+
+  background-image: url('../css/png/star1.png');
+  animation: zvezda 100s linear infinite;
+}
+@keyframes zvezda {
+  0%{
+    background-position: 0px 0px, 0px 0px, 0px 0px;
+  }
+  100%{
+    background-position: 0px 1800px,600px 1200px, 600px 1800px;
+  }
+}
+/* конец звездочек */

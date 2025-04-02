@@ -1,0 +1,82 @@
+
+@font-face {
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+}
+.png{
+    display: flex;
+    align-items: center;
+    background-size: 15vw;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../css/png/2.png');
+    height: vw;
+    width: 15vw;
+    margin-left: 40vw;
+    margin-top: 6vw;
+    padding-top: 15vw;
+}
+.palka{
+    margin-bottom: 2vw;
+    height: 1vw;
+    width: 22.5vw;
+    margin-left: 36.5vw;
+    border-bottom: 0.25vw solid white;
+}
+.p1hello {
+    display: flex;
+    align-items: center;
+    font-family: "Comfortaa", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    width: 45vw;
+    color: rgb(255, 255, 255);
+    font-size: 1.75vw;
+    text-align: center;
+    position: relative;
+    margin-left: 25vw;
+}
+.butreg{
+    font-family: "Comfortaa", serif;
+    width: 17vw;
+    height: 4vw;
+    margin: auto 39vw ; 
+    font-size: 1.5vw ;
+    border-radius: 10vh;
+    background-color: #0000003b ;
+    color: #ffffff;
+    border: solid #ffffff
+}
+.but1voiti{
+    font-family: "Comfortaa", serif;
+    width: 17vw;
+    height: 4vw;
+    margin: auto 39vw ; 
+    font-size: 1.5vw ;
+    border-radius: 10vh;
+    background-color: #0000003b ;
+    color: #ffffff;
+    border: solid #ffffff
+}
+.a{
+    padding-top: 2vw;
+    font-family: "Comfortaa", serif;
+    color: #ffffff;
+    font-size: 1.5vw;
+    text-decoration: none;
+}
+.p11{
+    display: flex;
+    align-items: center;
+    height: 1vw;
+    width: 14vw;
+    font-weight: 400;
+    font-style: normal;
+    color: rgba(255, 255, 255, 0.596);
+    padding-top: 1vw;
+    font-family: "Comfortaa", serif;
+    font-size: 1vw;
+    text-decoration: none;
+    margin-left: 42vw;
+    padding-bottom: 0.5vw;
+}

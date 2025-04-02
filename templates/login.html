@@ -3,25 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Вход</title>
 </head>
 <body>
-    <h1>Вход</h1>
     <form action="{{ url_for('login') }}" method="POST">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" name="username" required>
-        <br>
-        <label for="password">Пароль:</label>
-        <input type="password" name="password" required>
-        <br>
-        <label for="key">Ключ доступа:</label>
-        <input type="key" name="key" required>
-        <br>
-        <h5>для получения ключа обратитесь к <a href="https://t.me/ElkaOfficial1">Марку</a></h5>
-        <h5>или обратитесь за помощью в <a href="https://github.com/elkaofficial1/messenger/issues">гитхабе проекта</a></h5>
-        <button type="submit">Войти</button>
+        <div class="container">
+            <h1 class="h">Вход в аккаунт</h1>
+            <div class="cont1">
+                <input class="in" type="text" name="username" placeholder="Имя пользователя" required>
+                <br>
+                <input class="in" type="password" name="password" placeholder="Пароль" required>
+                <br>
+                <input class="in" type="key" name="key" placeholder="Код доступа" required>
+                <br>
+            </div>
+            <div class="cont2">
+                <h4 class="txt">для получения ключа обратитесь к <a class="href1" href="https://t.me/ElkaOfficial1">Марку</a></h4>
+                <h4 class="txt txt1">или обратитесь за помощью в <a class="href1" href="https://github.com/elkaofficial1/messenger/issues">гитхабе проекта</a></h4>
+                <br>
+                <a href="{{ url_for('register') }}" class="href">Нет аккаунта? Зарегистрироваться</a>
+                <br>
+                <button class="but"  type="submit">Войти</button>
+            </div>
+        </div>
     </form>
 
-    <a href="{{ url_for('register') }}">Нет аккаунта? Зарегистрироваться</a>
+
+    <div class="zvezdi"></div>
+    <div class="zvezdi1"></div>
 </body>
 </html>

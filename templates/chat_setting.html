@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки чата: {{ chat.name }}</title>
+</head>
+<body>
+    <h1>Настройки чата: {{ chat.name }}</h1>
+    <form method="POST" action="{{ url_for('chat_settings', chat_id=chat.chat_id) }}" enctype="multipart/form-data">
+        <label for="chat_name">Название чата:</label>
+        <input type="text" name="chat_name" value="{{ chat.name }}" required><br>
+
+        <label for="chat_description">Описание чата:</label>
+        <textarea name="chat_description">{{ chat.description }}</textarea><br>
+
+        <label for="chat_image">Изображение чата:</label>
+        <input type="file" name="chat_image" accept="image/*"><br>
+        {% if chat.chat_image %}
+        <p>Текущее изображение:</p>
+        <img src="{{ url_for('media', filename=chat.chat_image) }}" alt="Chat Image" style="max-width: 100px;"><br>
+        {% endif %}
+
+        <label for="participants">Участники:</label>
+        <select name="participants" multiple>
+            {% for user in all_users %}
+                <option value="{{ user }}" {% if user in chat.participants %}selected{% endif %}>{{ user }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Сохранить изменения</button>
+    </form>
+
+    <a href="{{ url_for('view_chat', chat_id=chat.chat_id) }}">Назад к чату</a>
+</body>
+</html>

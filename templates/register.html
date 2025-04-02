@@ -1,34 +1,47 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/reg.css">
+    <link rel="stylesheet" href="./css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
 </head>
 <body>
-    <h1>Регистрация</h1>
-    <form action="{{ url_for('register') }}" method="POST">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" name="username" required>
-        <br>
-        <label for="password">Пароль:</label>
-        <input type="password" name="password" required>
-        <br>
-        <label for="first_name">Имя:</label>
-        <input type="text" name="first_name" required>
-        <br>
-        <label for="last_name">Фамилия:</label>
-        <input type="text" name="last_name" required>
-        <br>
-        <label for="age">Возраст:</label>
-        <input type="number" name="age" required>
-        <br>
-        <label for="about_me">О себе:</label>
-        <textarea name="about_me"></textarea>
-        <br>
-        <button type="submit">Зарегистрироваться</button>
-    </form>
+    <div class="container">
+        <h1 class="h">Регистрация</h1>
+        <form action="{{ url_for('register') }}" method="POST"> 
+            <div class="inp">
+                <input class="in ina" type="text" placeholder="Имя пользователя" name="username" required>
+                <br>
+                <input class="in ina" type="password" placeholder="Пароль" name="password" required>
+                <br>
+                <div class="cont1">
+                    <input class="in inb" placeholder="Имя" type="text" name="first_name" required>
+                    <br>
+                    <input class="in inb1" type="text" placeholder="Фамилмя" name="last_name" required>
+                    <br>
+                </div>
+                <div class="cont2">
+                    <input class="xyita in" type="number" placeholder="Возраст" name="age" required>
+                    <br>
+                    <textarea class="xyita1 in" placeholder="О себе" name="about_me"></textarea>
+                    <br>
+                </div>
+                <div class="cont15">
+                    <a href="log.html" class="href">Уже есть аккаунт? Войти</a>
+                    <br>
+                    <button class="but" type="submit">Зарегистрироваться</button>
+                </div>
+            </div>
+        </form> 
 
-    <a href="{{ url_for('login') }}">Уже есть аккаунт? Войти</a>
+
+    </div>
+    <div class="zvezdi"></div>
+    <div class="zvezdi1"></div>
 </body>
 </html>

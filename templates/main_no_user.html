@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная 🌐</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main_no_user.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Document</title>
 </head>
-<body>
-    <h1>Здавствуйте!</h1>
-    <a href="{{ url_for('register') }}">Нет аккаунта? Зарегистрироваться </a>
-    <br>
-    <a href="{{ url_for('login') }}">Уже есть аккаунт? Войти</a>
+<body class="body">
+<div class="png"></div>
+    <table class="my_table">
+        <tr>
+            <td class="td">
+                <p class="p1hello">Здравствуйте! Вас приветствует мессенджер Cosmic</p>
+                <div class="palka"></div>
+                <button  class="butreg" > <a href="{{ url_for('register') }}" class="a"> Регистрация</a> </button>
+                <p class="p11">Уже есть аккаунт?</p>
+                <button  class="but1voiti" > <a href="{{ url_for('login') }}" class="a">Вход в аккаунт</a> </button>
+            </td>
+        </tr>
+    </table>
+    <div class="zvezdi"></div>
+    <div class="zvezdi1"></div>
 </body>
 </html>

@@ -1,0 +1,28 @@
+body {
+    background-image: url(/css/img/cosmos.jpg);
+}
+.zvezdi {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    z-index: 999;
+    pointer-events: none;
+
+    background-image: url('/css/img/zzzvezda.png');
+    animation: snow 60s linear infinite;
+}
+@keyframes snow {
+    0%{
+      background-position: 0px 0px, 0px 0px, 0px 0px;
+    }
+    100%{
+      background-position: 600px 0px,600px 1200px, 600px 1800px;
+    }
+}
+at {
+    color: blue;
+    border-top: 2px solid rebeccapurple;
+}

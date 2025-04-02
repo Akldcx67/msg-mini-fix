@@ -1,0 +1,79 @@
+@font-face {
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+}
+.container {
+    padding-top: 8vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cont1 {
+    /* margin-top: 1vh; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cont2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* *** */
+/* меин стили */
+.h {
+    margin-bottom: 2vw;
+    font-family: "Comfortaa", serif;
+    font-weight: 500;
+    color: white;
+    border-bottom: 0.35vw solid rgb(94, 72, 147);
+    text-align: center;
+    width: 45vw;
+    font-size: 3vw;
+    padding-bottom: 3vh;
+    margin-left: 1vw;
+}
+.in {
+    color: white;
+    border: solid white;
+    background-color: black;
+    border-radius: 590px;
+    margin-top: 2vh;
+    font-size: 3vh;
+    text-align: left;
+    padding-top: 0.5vw;
+    padding-left: 2vw;
+    background: transparent;
+    width: 32.5vw;
+    height: 8vh;
+    margin-left: 2vw;
+    font-family: "Comfortaa", serif;
+}
+.txt {
+    color: white;
+    font-size: 2vh;
+    margin-top: 2vh;
+    font-family: "Comfortaa", serif;
+}
+.txt1 {
+    margin-top: 1vh;
+}
+.href {
+    color: white;
+    font-size: 2vh;
+    margin-top: 2vh;
+    font-family: "Comfortaa", serif;
+}
+.href1 {
+    color: rgb(94,72,147);
+    font-family: "Comfortaa", serif;
+}
+.but {
+    width: 22vw;
+    height: 6vh;
+    border: none;
+    background-color: rgb(94, 72, 147);
+    border-radius: 15px;
+    color: white;
+    font-size: 3vh;
+    font-family: "Comfortaa", serif;
+}

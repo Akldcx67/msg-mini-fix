@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/axyevshee_okn0.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Окно!!!!!!</title>
+    
+</head>
+<body>
+    <div class="samui_cont">
+        <div class="ikonki_cont">
+            <div class="kosmiK ikonki1"></div><!-- иконка для поклонений -->
+            <div class="ikonki">
+                <a class="edit_profil" href="{{ url_for('edit_profile') }}"></a>
+                <a class="create_tgk" href="{{ url_for('create_channel') }}"></a>
+                <div class="setting"></div><!-- настройки -->
+                <div class="feedback"></div><!-- хззз связь с админом -->
+                <div class="bust"></div><!-- донаты -->
+            </div>
+            <div class="viti ikonki2"></div><!-- выйти -->
+        </div>
+        <div class="chati_cont">
+            <input type="text" name="text" class="inpu" placeholder="Найти чат..." >
+    <div class="chat_list">
+        <ul>
+            {% for chat in chats %}
+                {% if user in chat.participants %}
+                <li class="chat-item">
+                    {% if chat.chat_image %}
+                    <img src="{{ url_for('media', filename=chat.chat_image) }}" alt="Chat Image" class="chat-image">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='default_chat_image.png') }}" alt="Default Chat Image" class="chat-image">
+                    {% endif %}
+                    <a href="{{ url_for('view_chat', chat_id=chat['chat_id']) }}">{{ chat['name'] }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>  
+        </div>
+        <div class="perepiska_cont">
+            <div class="chapka">
+                <div class="kosmiK12"></div> 
+                <h1 class="name_chat">{{ chat.name }}</h1>
+                <div class="search"></div>
+                <div class="tritochtk"></div>
+            </div>
+                <div id="messages">
+                    <!-- Messages will be loaded here -->
+                </div>
+
+                <form class="wod" id="message-form" action="{{ url_for('send_message', chat_id=chat.chat_id) }}" method="POST" enctype="multipart/form-data">
+                    <textarea class="wwod" name="text" required placeholder="Напишите сообщение..." style="width: 100%; height: 60px;"></textarea>
+                    <br>
+                    <input class="obzor" type="file" name="media" accept="image/*,video/*">
+                    <br>
+                    <button class="go" type="submit"></button>
+                </form>
+        </div>
+        <div class="imocii_cont">
+
+        </div>
+    </div>
+    <div class="zvezdi"></div>
+    <div class="zvezdi1"></div>
+</body>
+</html>
