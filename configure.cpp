@@ -3,9 +3,7 @@
 #include <stdlib.h>
 #include <fstream>
 
-
 using namespace std;
-
 
 #ifdef _WIN32
     #include <windows.h>
@@ -13,7 +11,6 @@ using namespace std;
     #include <cstdlib>
     #include <unistd.h>
 #endif
-
 
 const string python_libraries[] = {"flask", "bcrypt", "uuid"};
 const string data_files[] = {"channels.json", "chats.json",
@@ -60,7 +57,6 @@ int checkLibraries(string flag) {
             #ifdef _WIN32
                 cout << "Unknown error, aborting" << endl;
                 exit(1);
-                return 1;
             #else
                 if (flag == "none") {
                     cout << "Error" << endl;
@@ -225,7 +221,6 @@ int main (int argc, char *argv[]) {
     default:
         cout << "Cannot find python, aborting" << endl;
         exit(1);
-        return 1;
         break;
     }
     cout << "Cheking for python dependencies..." << endl;
@@ -246,7 +241,6 @@ int main (int argc, char *argv[]) {
     default:
         cout << "Aborting" << endl;
         exit(1);
-        return 1;
         break;
     }
     #ifdef _WIN32
